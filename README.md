@@ -85,8 +85,8 @@ void CheatEngine_MoveSpeedTo(int speed) {
     // 1단계: 속도 체크 코드를 무력화
     const BYTE NOP_BYTE = 0x90;  // NOP 명령어 (아무것도 안함)
     
-    // 게임 코드: if (speed > 200) speed = 200;  ← 이 부분을
-    // NOP으로 덮어써서: (아무것도 안함)      ← 이렇게 만듦
+    // 게임 코드: if (speed > 200) speed = 200;  
+    // NOP으로 덮어써서: (아무것도 안함)   
     WriteProcessMemory(hProcess, gameBase + 0x7F51, &NOP_BYTE, 1);
     
     // 2단계: 실제 속도 값 변경
