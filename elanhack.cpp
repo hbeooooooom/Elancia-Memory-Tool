@@ -7,13 +7,7 @@
 #pragma comment(linker, "/SUBSYSTEM:WINDOWS")
 #pragma comment(lib, "comctl32.lib")
 
-// IDA 검색용 마커
-const char ELANCIA_SPEED_HACK_FINDER_12345[] = "ELANCIA_SPEED_HACK_FINDER_12345";
-const char ELANCIA_ATTACK_HACK_FINDER_67890[] = "ELANCIA_ATTACK_HACK_FINDER_67890";
-const char SPEED_HOTKEY_MARKER_ABCDEF[] = "SPEED_HOTKEY_MARKER_ABCDEF";
-const char CONNECTION_ERROR_MARKER_999[] = "CONNECTION_ERROR_MARKER_999";
 
-// GUI 컨트롤 ID
 #define IDC_PROCESS_LIST    1001
 #define IDC_REFRESH_BTN     1002
 #define IDC_SPEED_EDIT      1003
@@ -89,19 +83,11 @@ void CheatEngine_MoveSpeedTo(int speed) {
     // IDA 검색용 마커 사용
     const char* marker = ELANCIA_SPEED_HACK_FINDER_12345;
 
-    // 메모리 주소들 (IDA 검색용 주석)
-    const DWORD_PTR OFFSET_7F51 = 0x7F51; // IDA_SEARCH_OFFSET_1
-    const DWORD_PTR OFFSET_7F52 = 0x7F52; // IDA_SEARCH_OFFSET_2
-    const DWORD_PTR OFFSET_7F53 = 0x7F53; // IDA_SEARCH_OFFSET_3
-    const DWORD_PTR OFFSET_7F54 = 0x7F54; // IDA_SEARCH_OFFSET_4
-    const DWORD_PTR OFFSET_7F55 = 0x7F55; // IDA_SEARCH_OFFSET_5
-    const DWORD_PTR OFFSET_7F56 = 0x7F56; // IDA_SEARCH_OFFSET_6
-
-    const DWORD_PTR PLAYER_BASE_0058DAD4 = 0x0058DAD4; // IDA_SEARCH_PLAYER_BASE
-    const DWORD_PTR SPEED_STRUCT_178 = 0x178;          // IDA_SEARCH_SPEED_STRUCT
-    const DWORD_PTR RUN_SPEED_9C = 0x9C;               // IDA_SEARCH_RUN_OFFSET
-    const DWORD_PTR WALK_SPEED_98 = 0x98;              // IDA_SEARCH_WALK_OFFSET
-    const DWORD_PTR SWIM_SPEED_A4 = 0xA4;              // IDA_SEARCH_SWIM_OFFSET
+    const DWORD_PTR PLAYER_BASE;
+    const DWORD_PTR SPEED_STRUCT;
+    const DWORD_PTR RUN_SPEED;
+    const DWORD_PTR WALK_SPEED;
+    const DWORD_PTR SWIM_SPEED;
 
     const BYTE NOP_BYTE_90 = 0x90; // NOP_INSTRUCTION_MARKER
 
@@ -115,15 +101,15 @@ void CheatEngine_MoveSpeedTo(int speed) {
 
     // 속도 설정
     DWORD_PTR playerPtr;
-    if (ReadMemory(g_hTargetProcess, PLAYER_BASE_0058DAD4, &playerPtr, sizeof(playerPtr))) {
+    if (ReadMemory(g_hTargetProcess, PLAYER_BASE, &playerPtr, sizeof(playerPtr))) {
         DWORD_PTR speedStructPtr;
-        if (ReadMemory(g_hTargetProcess, playerPtr + SPEED_STRUCT_178, &speedStructPtr, sizeof(speedStructPtr))) {
+        if (ReadMemory(g_hTargetProcess, playerPtr + SPEED_STRUCT, &speedStructPtr, sizeof(speedStructPtr))) {
             // 달리기 속도
-            WriteMemory(g_hTargetProcess, speedStructPtr + RUN_SPEED_9C, &speed, sizeof(speed));
+            WriteMemory(g_hTargetProcess, speedStructPtr + RUN_SPEED, &speed, sizeof(speed));
             // 걷기 속도  
-            WriteMemory(g_hTargetProcess, speedStructPtr + WALK_SPEED_98, &speed, sizeof(speed));
+            WriteMemory(g_hTargetProcess, speedStructPtr + WALK_SPEED, &speed, sizeof(speed));
             // 헤엄치기 속도
-            WriteMemory(g_hTargetProcess, speedStructPtr + SWIM_SPEED_A4, &speed, sizeof(speed));
+            WriteMemory(g_hTargetProcess, speedStructPtr + SWIM_SPEED, &speed, sizeof(speed));
         }
     }
 }
@@ -134,23 +120,23 @@ void CheatEngine_AttackAlwaysPerFect() {
     // IDA 검색용 마커 사용
     const char* marker = ELANCIA_ATTACK_HACK_FINDER_67890;
 
-    const DWORD_PTR ATTACK_ADDR_4CFBC5 = 0x004CFBC5; // IDA_SEARCH_ATTACK_ADDR_1
-    const DWORD_PTR ATTACK_ADDR_4D05CD = 0x004D05CD; // IDA_SEARCH_ATTACK_ADDR_2
-    const BYTE PERFECT_BYTE_A2 = 0xA2;                // PERFECT_ATTACK_OPCODE
+    const DWORD_PTR ATTACK_ADDR;
+    const DWORD_PTR ATTACK_ADDR;
+    const BYTE PERFECT_BYT;                
 
-    WriteMemory(g_hTargetProcess, ATTACK_ADDR_4CFBC5, &PERFECT_BYTE_A2, 1);
-    WriteMemory(g_hTargetProcess, ATTACK_ADDR_4D05CD, &PERFECT_BYTE_A2, 1);
+    WriteMemory(g_hTargetProcess, ATTACK_ADDR, &PERFECT_BYTE, 1);
+    WriteMemory(g_hTargetProcess, ATTACK_ADDR, &PERFECT_BYTE, 1);
 }
 
 void CheatEngine_AttackAlwaysNormal() {
     if (!g_hTargetProcess) return;
 
-    const DWORD_PTR ATTACK_ADDR_4CFBC5 = 0x004CFBC5;
-    const DWORD_PTR ATTACK_ADDR_4D05CD = 0x004D05CD;
-    const BYTE NORMAL_BYTE_B6 = 0xB6;
+    const DWORD_PTR ATTACK_ADDR;
+    const DWORD_PTR ATTACK_ADDR;
+    const BYTE NORMAL_BYTE;
 
-    WriteMemory(g_hTargetProcess, ATTACK_ADDR_4CFBC5, &NORMAL_BYTE_B6, 1);
-    WriteMemory(g_hTargetProcess, ATTACK_ADDR_4D05CD, &NORMAL_BYTE_B6, 1);
+    WriteMemory(g_hTargetProcess, ATTACK_ADDR, &NORMAL_BYTE, 1);
+    WriteMemory(g_hTargetProcess, ATTACK_ADDR, &NORMAL_BYTE, 1);
 }
 
 // GUI 이벤트 처리
@@ -396,4 +382,5 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     }
 
     return 0;
+
 }
