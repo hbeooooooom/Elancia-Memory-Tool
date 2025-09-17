@@ -87,7 +87,7 @@ void CheatEngine_MoveSpeedTo(int speed) {
     
     // 게임 코드: if (speed > 200) speed = 200;  
     // NOP으로 덮어써서: (아무것도 안함)   
-    WriteProcessMemory(hProcess, gameBase + 0x7F51, &NOP_BYTE, 1);
+    WriteProcessMemory(hProcess, gameBase, &NOP_BYTE, 1);
     
     // 2단계: 실제 속도 값 변경
     WriteProcessMemory(hProcess, playerSpeedAddress, &speed, sizeof(speed));
