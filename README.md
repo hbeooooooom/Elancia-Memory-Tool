@@ -69,7 +69,7 @@ WriteProcessMemory(hProcess, targetAddress, data, size, &bytesWritten);
 ```c
 void CheatEngine_AttackAlwaysPerFect() {
     // 게임 코드에서 데미지 계산 부분을 수정
-    const BYTE PERFECT_OPCODE = 0xA2;  // "항상 크리티컬" 명령어
+    const BYTE PERFECT_OPCODE = ;  // "항상 크리티컬" 명령어
     
     WriteProcessMemory(hProcess, attackFunctionAddress, &PERFECT_OPCODE, 1);
     // 결과: 모든 공격이 크리티컬(2배 데미지)로 처리됨
@@ -96,3 +96,5 @@ void CheatEngine_MoveSpeedTo(int speed) {
 
 - 적정 이동속도의 조건을 걸고 넘어가는 속도를 입력시 동작을 무시한다.
 - 이후 조건문을 통과하면 실제 속도를 입력한 값으로 변경한다.
+
+자세한 변경값은 공개하지 않습니다.
